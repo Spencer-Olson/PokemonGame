@@ -1,2 +1,16 @@
 
 *.meta
+/Assets/Scenes/Sprites/Landscape
+/Assets/Scenes/Sprites/PokemonSprites
+/Library
+/ProjectSettings
+/Temp
+/Packages
+/UserSettings
+/Logs
+/Assets/Scenes/Sprites
+/Assets/Game/Resources/Pokemons
+/Assets/Game/Resources/Moves
+*.anim
+Assets/Scenes/Battle/Orange kid.ttf
+Assets/Scenes/SampleScene.unity
