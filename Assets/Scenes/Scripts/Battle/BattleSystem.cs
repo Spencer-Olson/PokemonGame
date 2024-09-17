@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -12,11 +13,13 @@ public class BattleSystem : MonoBehaviour
     [SerializeField] BattleHUD enemyHud;
     [SerializeField] BattleDialogueBox dialogueBox;
 
+    public event Action<bool> OnBattleOver;
+
     BattleState state;
     int currentAction;
     int currentMove;
 
-    private void Start()
+    public void StartBattle()
     {
        StartCoroutine(SetupBattle());
     }
@@ -69,6 +72,9 @@ public class BattleSystem : MonoBehaviour
         {
             yield return dialogueBox.TypeDialogue($"{enemyUnit.Pokemon.Base.Name} Fainted.");
             enemyUnit.PlayFaintAnimation();
+
+            yield return new WaitForSeconds(2f);
+            OnBattleOver(true);
         }
         else
         {
@@ -95,6 +101,9 @@ public class BattleSystem : MonoBehaviour
         {
             yield return dialogueBox.TypeDialogue($"{playerUnit.Pokemon.Base.Name} fainted.");
             playerUnit.PlayFaintAnimation();
+
+            yield return new WaitForSeconds(2f);
+            OnBattleOver(false);
         }
         else
         {
