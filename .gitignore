@@ -14,3 +14,10 @@
 *.anim
 Assets/Scenes/Battle/Orange kid.ttf
 Assets/Scenes/SampleScene.unity
+/Assets/Plugins/Demigiant/DOTween
+/obj/Debug
+*.csproj
+*.sln
+/Assets/Resources
+.vsconfig
+/.vs/PokemonGame/v16
