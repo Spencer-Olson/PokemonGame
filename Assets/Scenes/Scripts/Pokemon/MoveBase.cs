@@ -15,6 +15,7 @@ public class MoveBase : ScriptableObject
     [SerializeField] int accuracy;
     [SerializeField] bool alwaysHits;
     [SerializeField] int pp;
+    [SerializeField] int priority;
     [SerializeField] MoveCategory category;
     [SerializeField] MoveEffects effects;
     [SerializeField] List<SecondaryEffects> secondaries;
@@ -40,7 +41,6 @@ public class MoveBase : ScriptableObject
     {
         get { return accuracy; }
     }
-
     public bool AlwaysHits
     {
         get { return alwaysHits; }
@@ -49,22 +49,22 @@ public class MoveBase : ScriptableObject
     {
         get { return pp; }
     }
-
+    public int Priority
+    {
+        get { return priority; }
+    }
     public MoveCategory Category
     {
         get { return category; }
     }
-
     public MoveEffects Effects
     {
         get { return effects; }
     }
-
     public List<SecondaryEffects> Secondaries
     {
         get { return secondaries; }
     }
-
     public MoveTarget Target
     {
         get { return target; }
@@ -116,6 +116,6 @@ public class StatBoost
     public int boost;
 }
 
-public enum MoveCategory { Physcical, Special, Status }
+public enum MoveCategory { Physical, Special, Status }
 
 public enum MoveTarget { Foe, Self }
