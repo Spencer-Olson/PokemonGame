@@ -30,6 +30,8 @@ public class Pokemon
 
     }
 
+
+    public int EXP { get; set; }
     public int HP { get; set; }
 
     public List<Move> Moves { get; set; }
@@ -58,6 +60,8 @@ public class Pokemon
             if (Moves.Count >= 4)
                 break;
         }
+
+        EXP = Base.GetExpForLevel(Level);
 
         CalculateStats();
         HP = MaxHp;

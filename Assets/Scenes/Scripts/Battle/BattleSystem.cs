@@ -261,11 +261,7 @@ public class BattleSystem : MonoBehaviour
 
             if (targetUnit.Pokemon.HP <= 0)
             {
-                yield return dialogueBox.TypeDialogue($"{targetUnit.Pokemon.Base.Name} Fainted.");
-                targetUnit.PlayFaintAnimation();
-                yield return new WaitForSeconds(2f);
-
-                CheckForBattleOver(targetUnit);
+                yield return HandlePokemonFainted(targetUnit);
             }
            
         }
@@ -312,11 +308,7 @@ public class BattleSystem : MonoBehaviour
         yield return sourceUnit.HUD.UpdateHP();
         if (sourceUnit.Pokemon.HP <= 0)
         {
-            yield return dialogueBox.TypeDialogue($"{sourceUnit.Pokemon.Base.Name} Fainted.");
-            sourceUnit.PlayFaintAnimation();
-            yield return new WaitForSeconds(2f);
-
-            CheckForBattleOver(sourceUnit);
+            yield return HandlePokemonFainted(sourceUnit);
             yield return new WaitUntil(() => state == BattleState.RunningTurn);
         }
     }
@@ -355,6 +347,30 @@ public class BattleSystem : MonoBehaviour
             var message = pokemon.StatusChanges.Dequeue();
             yield return dialogueBox.TypeDialogue(message);
         }
+    }
+
+    IEnumerator HandlePokemonFainted(BattleUnit faintedUnit)
+    {
+        yield return dialogueBox.TypeDialogue($"{faintedUnit.Pokemon.Base.Name} Fainted.");
+        faintedUnit.PlayFaintAnimation();
+        yield return new WaitForSeconds(2f);
+
+        if (!faintedUnit.IsPlayerUnit)
+        {
+            //Gain EXP
+            var expYield = faintedUnit.Pokemon.Base.EXPYield;
+            var enemyLevel = faintedUnit.Pokemon.Level;
+            float trainerBonus = (isTrainerBattle) ? 1.5f : 1f;
+
+            int expGain = Mathf.FloorToInt((expYield * enemyLevel * trainerBonus) / 7);
+            playerUnit.Pokemon.EXP += expGain;
+            yield return dialogueBox.TypeDialogue($"{playerUnit.Pokemon.Base.Name} gained {expGain} exp.");
+
+            //LVL Up?
+
+        }
+
+        CheckForBattleOver(faintedUnit);
     }
 
     void CheckForBattleOver(BattleUnit faintedUnit)
