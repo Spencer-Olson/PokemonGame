@@ -7,7 +7,10 @@ public class PlayerController : MonoBehaviour
 {
     [SerializeField] string _name;
     [SerializeField] Sprite sprite;
-    
+
+    const float offSetY = .3f;
+
+
     public event Action OnEncountered;
     public event Action<Collider2D> OnEnterTrainersView;
 
@@ -67,7 +70,7 @@ public class PlayerController : MonoBehaviour
 
     private void CheckForEncounters()
     {
-        if (Physics2D.OverlapCircle(transform.position, 0.2f, GameLayers.i.EncounterLayer) != null)
+        if (Physics2D.OverlapCircle(transform.position - new Vector3(0,offSetY), 0.2f, GameLayers.i.EncounterLayer) != null)
         {
             if (UnityEngine.Random.Range(1, 101) <= 10)
             {
@@ -79,7 +82,7 @@ public class PlayerController : MonoBehaviour
 
     private void CheckIfInTrainersView()
     {
-        var collider = Physics2D.OverlapCircle(transform.position, 0.2f, GameLayers.i.FOVLayer);
+        var collider = Physics2D.OverlapCircle(transform.position - new Vector3(0, offSetY), 0.2f, GameLayers.i.FOVLayer);
         if (collider != null)
         {
             character.Animator.IsMoving = false;
