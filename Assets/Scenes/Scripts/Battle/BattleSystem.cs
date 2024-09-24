@@ -38,6 +38,8 @@ public class BattleSystem : MonoBehaviour
     PlayerController player;
     TrainerController trainer;
 
+    int escapeAttempts;
+
     public void StartBattle(PokemonParty playerParty, Pokemon wildPokemon)
     {
         isTrainerBattle = false;
@@ -104,6 +106,7 @@ public class BattleSystem : MonoBehaviour
 
         }
 
+        escapeAttempts = 0;
         partyScreen.Init();
         ActionSelection();
     }
@@ -195,6 +198,10 @@ public class BattleSystem : MonoBehaviour
             {
                 dialogueBox.EnableActionSelector(false);
                 yield return ThrowPokeball();
+            }
+            else if (playerAction == BattleAction.Run)
+            {
+                yield return TryToEscape();
             }
 
             //Enemy Turn
@@ -450,6 +457,7 @@ public class BattleSystem : MonoBehaviour
             else if (currentAction == 3)
             {
                 //Run
+                StartCoroutine(RunTurns(BattleAction.Run));
             }
         }
     }
@@ -702,5 +710,44 @@ public class BattleSystem : MonoBehaviour
             shakeCount++;
         }
         return shakeCount;
+    }
+
+    IEnumerator TryToEscape()
+    {
+        state = BattleState.Busy;
+
+        if (isTrainerBattle)
+        {
+            yield return dialogueBox.TypeDialogue($"You can't run from a trainer battle!");
+            state = BattleState.RunningTurn;
+            yield break;
+        }
+
+        escapeAttempts++;
+        var playerSpeed = playerUnit.Pokemon.Speed;
+        var enemySpeed = enemyUnit.Pokemon.Speed;
+
+        if (enemySpeed < playerSpeed)
+        {
+            yield return dialogueBox.TypeDialogue($"Got away safely!");
+            BattleOver(true);
+        }
+        else
+        {
+            float f = (playerSpeed * 128) / enemySpeed + 30 * escapeAttempts;
+            f = f % 256;
+
+            if (UnityEngine.Random.Range(0, 255) < f)
+            {
+                yield return dialogueBox.TypeDialogue($"Got away safely!");
+                BattleOver(true);
+            }
+            else
+            {
+                yield return dialogueBox.TypeDialogue($"Couldn't get away!");
+                state = BattleState.RunningTurn;
+            }
+        }
+
     }
 }
