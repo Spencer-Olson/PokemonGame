@@ -148,6 +148,18 @@ public class ConditionsDB
            }
         }
     };
+
+    public static float GetStatusBonus(Condition condition)
+    {
+        if (condition == null)
+            return 1f;
+        else if (condition.ID == ConditionID.slp || condition.ID == ConditionID.frz)
+            return 2f;
+        else if (condition.ID == ConditionID.brn || condition.ID == ConditionID.par || condition.ID == ConditionID.psn || condition.ID == ConditionID.tox)
+            return 1.5f;
+
+        return 1f;
+    }
 }
 
 public enum ConditionID 
