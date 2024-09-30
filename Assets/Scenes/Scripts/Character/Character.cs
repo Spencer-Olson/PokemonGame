@@ -11,11 +11,19 @@ public class Character : MonoBehaviour
 
     public bool IsMoving { get; set; }
 
+    public float OffsetY { get; private set; } = .3f;
     private void Awake()
     {
         animator = GetComponent<CharacterAnimator>();
+        SetPositionAndSnapToTile(transform.position);
     }
 
+    public void SetPositionAndSnapToTile(Vector2 pos)
+    {
+        pos.x = Mathf.Floor(pos.x) + .5f;
+        pos.y = Mathf.Floor(pos.y) + .5f + OffsetY;
+        transform.position = pos;
+    }
     public IEnumerator Move(Vector2 moveVec, Action OnMoveOver=null)
     {
         animator.MoveX = Mathf.Clamp(moveVec.x, -1f, 1f);
