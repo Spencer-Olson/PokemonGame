@@ -13,6 +13,9 @@ public class GameController : MonoBehaviour
     GameState state;
     GameState stateBeforePause;
 
+    public SceneDetails CurrScene { get; private set; }
+    public SceneDetails PrevScene { get; private set; }
+
     public static GameController Instance { get; private set; }
 
     private void Awake()
@@ -108,6 +111,12 @@ public class GameController : MonoBehaviour
         {
             DialogueManager.Instance.HandleUpdate();
         }
+    }
+
+    public void SetCurrScene(SceneDetails currScene)
+    {
+        PrevScene = CurrScene;
+        CurrScene = currScene;
     }
 }
 
